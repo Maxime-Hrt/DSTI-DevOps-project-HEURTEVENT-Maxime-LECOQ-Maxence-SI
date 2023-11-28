@@ -1,4 +1,4 @@
 .idea
 
-user/src/devops_project
-user/src/requests.http
+user/devops-project
+user/requests.http

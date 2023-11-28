@@ -1,17 +1,20 @@
-package main
+package src
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/redis/go-redis/v9"
 	"strconv"
 	"time"
 )
 
-var rdb = redis.NewClient(&redis.Options{
+var Rdb = redis.NewClient(&redis.Options{
 	Addr:     "localhost:6379",
 	Password: "",
 	DB:       0,
 })
+
+var Ctx = context.Background()
 
 func SaveContactInRedis(rdb *redis.Client, contact *Contact) error {
 	contact.ID = strconv.FormatInt(time.Now().UnixNano(), 10)
@@ -22,11 +25,11 @@ func SaveContactInRedis(rdb *redis.Client, contact *Contact) error {
 		return err
 	}
 
-	return rdb.Set(ctx, "contact:"+contact.ID, data, 0).Err()
+	return rdb.Set(Ctx, "contact:"+contact.ID, data, 0).Err()
 }
 
 func GetContactFromRedis(rdb *redis.Client, id string) (*Contact, error) {
-	val, err := rdb.Get(ctx, "contact:"+id).Result()
+	val, err := rdb.Get(Ctx, "contact:"+id).Result()
 	if err != nil {
 		return nil, err
 	}
@@ -41,14 +44,14 @@ func GetContactFromRedis(rdb *redis.Client, id string) (*Contact, error) {
 }
 
 func GetAllContactsFromRedis(rdb *redis.Client) ([]Contact, error) {
-	keys, err := rdb.Keys(ctx, "contact:*").Result()
+	keys, err := rdb.Keys(Ctx, "contact:*").Result()
 	if err != nil {
 		return nil, err
 	}
 
 	var contacts []Contact
 	for _, key := range keys {
-		val, err := rdb.Get(ctx, key).Result()
+		val, err := rdb.Get(Ctx, key).Result()
 		if err != nil {
 			return nil, err
 		}
@@ -66,17 +69,17 @@ func GetAllContactsFromRedis(rdb *redis.Client) ([]Contact, error) {
 }
 
 func DeleteContactFromRedis(rdb *redis.Client, id string) error {
-	return rdb.Del(ctx, "contact:"+id).Err()
+	return rdb.Del(Ctx, "contact:"+id).Err()
 }
 
 func UpdateContactInRedis(rdb *redis.Client, id string, contact *Contact) error {
-	exists, err := rdb.Exists(ctx, "contact:"+id).Result()
+	exists, err := rdb.Exists(Ctx, "contact:"+id).Result()
 	if err != nil {
 		return err
 	}
 
 	if exists == 0 {
-		return nil //
+		return nil
 	}
 
 	data, err := json.Marshal(contact)
@@ -84,5 +87,5 @@ func UpdateContactInRedis(rdb *redis.Client, id string, contact *Contact) error 
 		return err
 	}
 
-	return rdb.Set(ctx, "contact:"+id, data, 0).Err()
+	return rdb.Set(Ctx, "contact:"+id, data, 0).Err()
 }

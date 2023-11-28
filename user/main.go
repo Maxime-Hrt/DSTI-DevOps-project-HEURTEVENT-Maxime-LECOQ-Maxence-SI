@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"devops-project/src"
 	"github.com/gofiber/fiber/v2"
 	"log"
 	"os"
@@ -10,11 +11,9 @@ import (
 	"time"
 )
 
-var ctx = context.Background()
-
 func main() {
 
-	_, err := rdb.Ping(ctx).Result()
+	_, err := src.Rdb.Ping(src.Ctx).Result()
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -23,11 +22,11 @@ func main() {
 
 	app := fiber.New()
 
-	app.Get("/contacts", GetContacts)
-	app.Post("/contacts", CreateContact)
-	app.Get("/contacts/:id", GetContact)
-	app.Put("/contacts/:id", UpdateContact)
-	app.Delete("/contacts/:id", DeleteContact)
+	app.Get("/contacts", src.GetContacts)
+	app.Post("/contacts", src.CreateContact)
+	app.Get("/contacts/:id", src.GetContact)
+	app.Put("/contacts/:id", src.UpdateContact)
+	app.Delete("/contacts/:id", src.DeleteContact)
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
@@ -45,7 +44,7 @@ func main() {
 	if err := app.Shutdown(); err != nil {
 		log.Printf("Error shutting down Fiber: %v\n", err)
 	}
-	if err := rdb.Close(); err != nil {
+	if err := src.Rdb.Close(); err != nil {
 		log.Printf("Error closing Redis connection: %v\n", err)
 	}
 	<-ctx.Done()

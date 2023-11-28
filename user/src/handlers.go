@@ -2,13 +2,10 @@ package main
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/redis/go-redis/v9"
 )
 
 func GetContacts(c *fiber.Ctx) error {
-	rdb := c.Locals("rdb").(*redis.Client)
-	ctx := c.Context()
-	contacts, err := GetAllContactsFromRedis(ctx, rdb)
+	contacts, err := GetAllContactsFromRedis(rdb)
 	if err != nil {
 		return c.Status(500).SendString(err.Error())
 	}
@@ -16,15 +13,12 @@ func GetContacts(c *fiber.Ctx) error {
 }
 
 func CreateContact(c *fiber.Ctx) error {
-	rdb := c.Locals("rdb").(*redis.Client)
-
 	var contact Contact
 	if err := c.BodyParser(&contact); err != nil {
 		return c.Status(400).SendString(err.Error())
 	}
 
-	ctx := c.Context()
-	if err := SaveContactInRedis(ctx, rdb, &contact); err != nil {
+	if err := SaveContactInRedis(rdb, &contact); err != nil {
 		return c.Status(500).SendString(err.Error())
 	}
 
@@ -32,11 +26,9 @@ func CreateContact(c *fiber.Ctx) error {
 }
 
 func GetContact(c *fiber.Ctx) error {
-	rdb := c.Locals("rdb").(*redis.Client)
 	id := c.Params("id")
-	ctx := c.Context()
 
-	contact, err := GetContactFromRedis(ctx, rdb, id)
+	contact, err := GetContactFromRedis(rdb, id)
 	if err != nil {
 		return c.Status(404).SendString(err.Error())
 	}
@@ -45,16 +37,14 @@ func GetContact(c *fiber.Ctx) error {
 }
 
 func UpdateContact(c *fiber.Ctx) error {
-	rdb := c.Locals("rdb").(*redis.Client)
 	id := c.Params("id")
-	ctx := c.Context()
 
 	var contact Contact
 	if err := c.BodyParser(&contact); err != nil {
 		return c.Status(400).SendString(err.Error())
 	}
 
-	if err := UpdateContactInRedis(ctx, rdb, id, &contact); err != nil {
+	if err := UpdateContactInRedis(rdb, id, &contact); err != nil {
 		return c.Status(500).SendString(err.Error())
 	}
 
@@ -62,11 +52,9 @@ func UpdateContact(c *fiber.Ctx) error {
 }
 
 func DeleteContact(c *fiber.Ctx) error {
-	rdb := c.Locals("rdb").(*redis.Client)
 	id := c.Params("id")
-	ctx := c.Context()
 
-	if err := DeleteContactFromRedis(ctx, rdb, id); err != nil {
+	if err := DeleteContactFromRedis(rdb, id); err != nil {
 		return c.Status(500).SendString(err.Error())
 	}
 

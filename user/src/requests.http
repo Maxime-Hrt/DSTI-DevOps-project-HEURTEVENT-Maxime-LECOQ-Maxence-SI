@@ -2,19 +2,20 @@
 GET http://localhost:8080/contacts
 
 ### Get Contact by ID
-GET http://localhost:8080/user/5
+GET http://localhost:8080/contacts/1701159646304553000
 
 ### Create Contact
-POST http://localhost:8080/create
+POST http://localhost:8080/contacts
 content-type: application/json
 
 {
-  "id": "5",
-  "name": "Climat"
+  "name": "Jordan",
+  "email": "test@jordan.com",
+  "phone": "1234567890"
 }
 
 ### Update Contact
-PUT http://localhost:8080/contacts/{id}
+PUT http://localhost:8080/contacts/1701159646304553000
 content-type: application/json
 
 {
@@ -24,4 +25,4 @@ content-type: application/json
 }
 
 ### Delete Contact
-DELETE http://localhost:8080/contacts/{id}
+DELETE http://localhost:8080/contacts/1701160229253841000

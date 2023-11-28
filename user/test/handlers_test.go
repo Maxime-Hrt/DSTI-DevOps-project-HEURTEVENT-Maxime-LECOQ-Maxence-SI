@@ -17,7 +17,8 @@ func SetupTestApp() *fiber.App {
 	app.Post("/contacts", src.CreateContact)
 	app.Get("/contacts/:id", src.GetContact)
 	app.Put("/contacts/:id", src.UpdateContact)
-	app.Delete("/contacts/:id", src.DeleteContact)
+	app.Delete("/contacts/id/:id", src.DeleteContact)
+	app.Delete("/contacts/email/:email", src.DeleteContact)
 	return app
 }
 
@@ -56,12 +57,10 @@ func TestCreateContact(t *testing.T) {
 	utils.AssertEqual(t, nil, err)
 	utils.AssertEqual(t, 500, respPost.StatusCode)
 
-	t.Log(respPost.Header.Get("ID"))
-
 	// Delete contact
-	contactPath := fmt.Sprintf("/contacts/%s", respPost.Header.Get("ID"))
+	contactPath := fmt.Sprintf("/contacts/email/%s", contact.Email)
 	reqDelete := httptest.NewRequest("DELETE", contactPath, nil)
 	respDelete, err := app.Test(reqDelete)
 	utils.AssertEqual(t, nil, err)
-	utils.AssertEqual(t, 200, respDelete.StatusCode)
+	utils.AssertEqual(t, 204, respDelete.StatusCode)
 }

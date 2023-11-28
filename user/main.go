@@ -26,7 +26,8 @@ func main() {
 	app.Post("/contacts", src.CreateContact)
 	app.Get("/contacts/:id", src.GetContact)
 	app.Put("/contacts/:id", src.UpdateContact)
-	app.Delete("/contacts/:id", src.DeleteContact)
+	app.Delete("/contacts/id/:id", src.DeleteContact)
+	app.Delete("/contacts/email/:email", src.DeleteContactByEmail)
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)

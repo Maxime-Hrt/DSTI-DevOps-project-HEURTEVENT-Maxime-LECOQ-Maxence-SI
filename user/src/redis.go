@@ -3,6 +3,7 @@ package src
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/redis/go-redis/v9"
 	"strconv"
 	"time"
@@ -21,6 +22,26 @@ func NewRedisService(client *redis.Client) *RedisService {
 }
 
 func (r *RedisService) SaveContactInRedis(contact *Contact) error {
+	iter := r.Client.Scan(Ctx, 0, "contact:*", 0).Iterator()
+	for iter.Next(Ctx) {
+		existingContactData, err := r.Client.Get(Ctx, iter.Val()).Result()
+		if err != nil {
+			return err
+		}
+
+		var existingContact Contact
+		err = json.Unmarshal([]byte(existingContactData), &existingContact)
+		if err != nil {
+			return err
+		}
+		if existingContact.Email == contact.Email {
+			return fmt.Errorf("this email already exists")
+		}
+	}
+	if err := iter.Err(); err != nil {
+		return err
+	}
+
 	contact.ID = strconv.FormatInt(time.Now().UnixNano(), 10)
 	contact.CreatedAt = time.Now()
 
@@ -73,7 +94,58 @@ func (r *RedisService) GetAllContactsFromRedis() ([]Contact, error) {
 }
 
 func (r *RedisService) DeleteContactFromRedis(id string) error {
+	key := "contact:" + id
+
+	exists, err := r.Client.Exists(Ctx, key).Result()
+	if err != nil {
+		if err == redis.Nil {
+			return nil
+		}
+		return err
+	}
+
+	if exists == 0 {
+		return nil
+	}
+
 	return r.Client.Del(Ctx, "contact:"+id).Err()
+}
+
+func (r *RedisService) DeleteContactByEmail(email string) error {
+	var contacts []Contact
+	keys, err := r.Client.Keys(Ctx, "contact:*").Result()
+	if err != nil {
+		return err
+	}
+
+	for _, key := range keys {
+		val, err := r.Client.Get(Ctx, key).Result()
+		if err != nil {
+			return err
+		}
+
+		var contact Contact
+		err = json.Unmarshal([]byte(val), &contact)
+		if err != nil {
+			return err
+		}
+
+		contacts = append(contacts, contact)
+	}
+
+	var emailKey string
+	for _, contact := range contacts {
+		fmt.Println(contact.Email)
+		if contact.Email == email {
+			emailKey = "contact:" + contact.ID
+		}
+	}
+
+	if emailKey == "" {
+		return nil
+	}
+
+	return r.Client.Del(Ctx, emailKey).Err()
 }
 
 func (r *RedisService) UpdateContactInRedis(id string, updatedContact *Contact) error {

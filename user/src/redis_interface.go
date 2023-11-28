@@ -7,6 +7,7 @@ type RedisClient interface {
 	GetContactFromRedis(rdb *redis.Client, id string) (*Contact, error)
 	GetAllContactsFromRedis(rdb *redis.Client) ([]Contact, error)
 	DeleteContactFromRedis(rdb *redis.Client, id string) error
+	DeleteContactByEmail(rdb *redis.Client, email string) error
 	UpdateContactInRedis(rdb *redis.Client, id string, updatedContact *Contact) error
 }
 

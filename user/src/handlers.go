@@ -62,3 +62,13 @@ func DeleteContact(c *fiber.Ctx) error {
 
 	return c.SendStatus(204)
 }
+
+func DeleteContactByEmail(c *fiber.Ctx) error {
+	email := c.Params("email")
+
+	if err := redisService.DeleteContactByEmail(email); err != nil {
+		return c.Status(500).SendString(err.Error())
+	}
+
+	return c.SendStatus(204)
+}

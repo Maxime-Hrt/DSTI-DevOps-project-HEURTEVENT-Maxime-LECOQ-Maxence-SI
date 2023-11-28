@@ -8,15 +8,19 @@ import (
 	"time"
 )
 
-var Rdb = redis.NewClient(&redis.Options{
-	Addr:     "localhost:6379",
-	Password: "",
-	DB:       0,
-})
+type RedisService struct {
+	Client *redis.Client
+}
 
 var Ctx = context.Background()
 
-func SaveContactInRedis(rdb *redis.Client, contact *Contact) error {
+func NewRedisService(client *redis.Client) *RedisService {
+	return &RedisService{
+		Client: client,
+	}
+}
+
+func (r *RedisService) SaveContactInRedis(contact *Contact) error {
 	contact.ID = strconv.FormatInt(time.Now().UnixNano(), 10)
 	contact.CreatedAt = time.Now()
 
@@ -25,11 +29,11 @@ func SaveContactInRedis(rdb *redis.Client, contact *Contact) error {
 		return err
 	}
 
-	return rdb.Set(Ctx, "contact:"+contact.ID, data, 0).Err()
+	return r.Client.Set(Ctx, "contact:"+contact.ID, data, 0).Err()
 }
 
-func GetContactFromRedis(rdb *redis.Client, id string) (*Contact, error) {
-	val, err := rdb.Get(Ctx, "contact:"+id).Result()
+func (r *RedisService) GetContactFromRedis(id string) (*Contact, error) {
+	val, err := r.Client.Get(Ctx, "contact:"+id).Result()
 	if err != nil {
 		return nil, err
 	}
@@ -43,15 +47,15 @@ func GetContactFromRedis(rdb *redis.Client, id string) (*Contact, error) {
 	return &contact, nil
 }
 
-func GetAllContactsFromRedis(rdb *redis.Client) ([]Contact, error) {
-	keys, err := rdb.Keys(Ctx, "contact:*").Result()
+func (r *RedisService) GetAllContactsFromRedis() ([]Contact, error) {
+	keys, err := r.Client.Keys(Ctx, "contact:*").Result()
 	if err != nil {
 		return nil, err
 	}
 
 	var contacts []Contact
 	for _, key := range keys {
-		val, err := rdb.Get(Ctx, key).Result()
+		val, err := r.Client.Get(Ctx, key).Result()
 		if err != nil {
 			return nil, err
 		}
@@ -68,14 +72,14 @@ func GetAllContactsFromRedis(rdb *redis.Client) ([]Contact, error) {
 	return contacts, nil
 }
 
-func DeleteContactFromRedis(rdb *redis.Client, id string) error {
-	return rdb.Del(Ctx, "contact:"+id).Err()
+func (r *RedisService) DeleteContactFromRedis(id string) error {
+	return r.Client.Del(Ctx, "contact:"+id).Err()
 }
 
-func UpdateContactInRedis(rdb *redis.Client, id string, updatedContact *Contact) error {
+func (r *RedisService) UpdateContactInRedis(id string, updatedContact *Contact) error {
 	key := "contact:" + id
 
-	exists, err := rdb.Exists(Ctx, key).Result()
+	exists, err := r.Client.Exists(Ctx, key).Result()
 	if err != nil {
 		if err == redis.Nil {
 			return nil
@@ -87,7 +91,7 @@ func UpdateContactInRedis(rdb *redis.Client, id string, updatedContact *Contact)
 		return nil
 	}
 
-	existingData, err := rdb.Get(Ctx, key).Result()
+	existingData, err := r.Client.Get(Ctx, key).Result()
 	if err != nil {
 		return err
 	}
@@ -113,5 +117,5 @@ func UpdateContactInRedis(rdb *redis.Client, id string, updatedContact *Contact)
 		return err
 	}
 
-	return rdb.Set(Ctx, key, data, 0).Err()
+	return r.Client.Set(Ctx, key, data, 0).Err()
 }

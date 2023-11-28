@@ -4,8 +4,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+var redisService = NewRedisService(Rdb)
+
 func GetContacts(c *fiber.Ctx) error {
-	contacts, err := GetAllContactsFromRedis(Rdb)
+	contacts, err := redisService.GetAllContactsFromRedis()
 	if err != nil {
 		return c.Status(500).SendString(err.Error())
 	}
@@ -18,7 +20,7 @@ func CreateContact(c *fiber.Ctx) error {
 		return c.Status(400).SendString(err.Error())
 	}
 
-	if err := SaveContactInRedis(Rdb, &contact); err != nil {
+	if err := redisService.SaveContactInRedis(&contact); err != nil {
 		return c.Status(500).SendString(err.Error())
 	}
 
@@ -28,7 +30,7 @@ func CreateContact(c *fiber.Ctx) error {
 func GetContact(c *fiber.Ctx) error {
 	id := c.Params("id")
 
-	contact, err := GetContactFromRedis(Rdb, id)
+	contact, err := redisService.GetContactFromRedis(id)
 	if err != nil {
 		return c.Status(404).SendString(err.Error())
 	}
@@ -44,7 +46,7 @@ func UpdateContact(c *fiber.Ctx) error {
 		return c.Status(400).SendString(err.Error())
 	}
 
-	if err := UpdateContactInRedis(Rdb, id, &contact); err != nil {
+	if err := redisService.UpdateContactInRedis(id, &contact); err != nil {
 		return c.Status(500).SendString(err.Error())
 	}
 
@@ -54,7 +56,7 @@ func UpdateContact(c *fiber.Ctx) error {
 func DeleteContact(c *fiber.Ctx) error {
 	id := c.Params("id")
 
-	if err := DeleteContactFromRedis(Rdb, id); err != nil {
+	if err := redisService.DeleteContactFromRedis(id); err != nil {
 		return c.Status(500).SendString(err.Error())
 	}
 

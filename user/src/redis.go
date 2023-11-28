@@ -72,9 +72,14 @@ func DeleteContactFromRedis(rdb *redis.Client, id string) error {
 	return rdb.Del(Ctx, "contact:"+id).Err()
 }
 
-func UpdateContactInRedis(rdb *redis.Client, id string, contact *Contact) error {
-	exists, err := rdb.Exists(Ctx, "contact:"+id).Result()
+func UpdateContactInRedis(rdb *redis.Client, id string, updatedContact *Contact) error {
+	key := "contact:" + id
+
+	exists, err := rdb.Exists(Ctx, key).Result()
 	if err != nil {
+		if err == redis.Nil {
+			return nil
+		}
 		return err
 	}
 
@@ -82,10 +87,31 @@ func UpdateContactInRedis(rdb *redis.Client, id string, contact *Contact) error 
 		return nil
 	}
 
-	data, err := json.Marshal(contact)
+	existingData, err := rdb.Get(Ctx, key).Result()
 	if err != nil {
 		return err
 	}
 
-	return rdb.Set(Ctx, "contact:"+id, data, 0).Err()
+	var existingContact Contact
+	err = json.Unmarshal([]byte(existingData), &existingContact)
+	if err != nil {
+		return err
+	}
+
+	if updatedContact.Name != "" {
+		existingContact.Name = updatedContact.Name
+	}
+	if updatedContact.Email != "" {
+		existingContact.Email = updatedContact.Email
+	}
+	if updatedContact.Phone != "" {
+		existingContact.Phone = updatedContact.Phone
+	}
+
+	data, err := json.Marshal(existingContact)
+	if err != nil {
+		return err
+	}
+
+	return rdb.Set(Ctx, key, data, 0).Err()
 }

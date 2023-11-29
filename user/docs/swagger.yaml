@@ -1,0 +1,169 @@
+definitions:
+  src.Contact:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /contacts:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all contacts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/src.Contact'
+            type: array
+      summary: Get list of contacts
+      tags:
+      - contacts
+    post:
+      consumes:
+      - application/json
+      description: Add a new contact to the database
+      parameters:
+      - description: Contact to add
+        in: body
+        name: contact
+        required: true
+        schema:
+          $ref: '#/definitions/src.Contact'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Contact successfully created
+          schema:
+            $ref: '#/definitions/src.Contact'
+        "400":
+          description: Invalid input
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Create a new contact
+      tags:
+      - contacts
+  /contacts/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a contact by its unique ID
+      parameters:
+      - description: Contact ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Contact found
+          schema:
+            $ref: '#/definitions/src.Contact'
+        "404":
+          description: Contact not found
+          schema:
+            type: string
+      summary: Get a contact by ID
+      tags:
+      - contacts
+    put:
+      consumes:
+      - application/json
+      description: Update an existing contact by its unique ID
+      parameters:
+      - description: Contact ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated contact information
+        in: body
+        name: contact
+        required: true
+        schema:
+          $ref: '#/definitions/src.Contact'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Contact successfully updated
+          schema:
+            $ref: '#/definitions/src.Contact'
+        "400":
+          description: Invalid input
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Update a contact
+      tags:
+      - contacts
+  /contacts/email/{email}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove a contact from the database by email
+      parameters:
+      - description: Contact Email
+        in: path
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Contact successfully deleted
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Delete a contact by email
+      tags:
+      - contacts
+  /contacts/id/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove a contact from the database by its unique ID
+      parameters:
+      - description: Contact ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Contact successfully deleted
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Delete a contact by ID
+      tags:
+      - contacts
+swagger: "2.0"

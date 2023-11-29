@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	_ "devops-project/docs"
 	"devops-project/src"
+	fiberSwagger "github.com/arsmn/fiber-swagger/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"log"
@@ -29,6 +31,8 @@ func main() {
 		AllowHeaders: "Origin, Content-Type, Accept",
 		AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH",
 	}))
+
+	app.Get("/swagger/*", fiberSwagger.HandlerDefault)
 
 	app.Get("/contacts", src.GetContacts)
 	app.Post("/contacts", src.CreateContact)

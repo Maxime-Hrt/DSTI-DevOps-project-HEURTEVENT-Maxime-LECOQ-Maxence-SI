@@ -4,6 +4,7 @@ import (
 	"context"
 	"devops-project/src"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"log"
 	"os"
 	"os/signal"
@@ -21,6 +22,13 @@ func main() {
 	}
 
 	app := fiber.New()
+
+	// Configuration du middleware CORS
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "*", // Autorise toutes les origines, à ajuster selon vos besoins
+		AllowHeaders: "Origin, Content-Type, Accept",
+		AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH",
+	}))
 
 	app.Get("/contacts", src.GetContacts)
 	app.Post("/contacts", src.CreateContact)

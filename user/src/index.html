@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>CRUD GO APP</title>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+    <h1>CRUD Dashboard</h1>
+    <button id="loadContactsBtn">Load Contacts</button>
+    <button id="showAddContactFormBtn">Add Contact</button>
+    <div id="contacts"></div>
+    <div id="contactFormDiv" class="hidden">
+        <form id="contactForm">
+            <input type="hidden" id="contactId">
+            <label for="name"></label><input type="text" id="name" placeholder="name">
+            <label for="email"></label><input type="email" id="email" placeholder="email">
+            <label for="phone"></label><input type="tel" id="phone" placeholder="phone">
+            <button type="submit">Save</button>
+        </form>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

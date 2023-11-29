@@ -1,0 +1,261 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {},
+        "version": "",
+        "title": ""
+    },
+    "paths": {
+        "/contacts": {
+            "get": {
+                "description": "Retrieve a list of all contacts",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "contacts"
+                ],
+                "summary": "Get list of contacts",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/src.Contact"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Add a new contact to the database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "contacts"
+                ],
+                "summary": "Create a new contact",
+                "parameters": [
+                    {
+                        "description": "Contact to add",
+                        "name": "contact",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/src.Contact"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Contact successfully created",
+                        "schema": {
+                            "$ref": "#/definitions/src.Contact"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/contacts/email/{email}": {
+            "delete": {
+                "description": "Remove a contact from the database by email",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "contacts"
+                ],
+                "summary": "Delete a contact by email",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Contact Email",
+                        "name": "email",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Contact successfully deleted"
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/contacts/id/{id}": {
+            "delete": {
+                "description": "Remove a contact from the database by its unique ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "contacts"
+                ],
+                "summary": "Delete a contact by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Contact ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Contact successfully deleted"
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/contacts/{id}": {
+            "get": {
+                "description": "Retrieve a contact by its unique ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "contacts"
+                ],
+                "summary": "Get a contact by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Contact ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Contact found",
+                        "schema": {
+                            "$ref": "#/definitions/src.Contact"
+                        }
+                    },
+                    "404": {
+                        "description": "Contact not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update an existing contact by its unique ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "contacts"
+                ],
+                "summary": "Update a contact",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Contact ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated contact information",
+                        "name": "contact",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/src.Contact"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Contact successfully updated",
+                        "schema": {
+                            "$ref": "#/definitions/src.Contact"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "src.Contact": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

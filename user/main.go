@@ -23,9 +23,9 @@ func main() {
 
 	app := fiber.New()
 
-	// Configuration du middleware CORS
+	// CORS middleware configuration
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "*", // Autorise toutes les origines, à ajuster selon vos besoins
+		AllowOrigins: "*", // Allow all origins
 		AllowHeaders: "Origin, Content-Type, Accept",
 		AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH",
 	}))
@@ -47,7 +47,7 @@ func main() {
 	}()
 
 	<-c
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
 	if err := app.Shutdown(); err != nil {

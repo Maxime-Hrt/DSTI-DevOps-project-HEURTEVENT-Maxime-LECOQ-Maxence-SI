@@ -11,32 +11,32 @@ import (
 )
 
 func TestSaveContactInRedis(t *testing.T) {
-	// Configuration du client Redis pour les tests
+	// Redis configuration
 	client := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379", // ou l'adresse de votre instance de test Redis
-		Password: "",               // aucun mot de passe pour Redis
-		DB:       0,                // Utilisez une base de données distincte pour les tests
+		Addr:     "localhost:6379",
+		Password: "",
+		DB:       0,
 	})
 
-	// Assurez-vous de nettoyer la base de données de test après le test
+	// Clear Redis
 	defer client.FlushDB(context.Background()).Result()
 
 	redisService := src.NewRedisService(client)
 
-	// Créer un contact
+	// Create a contact
 	contact := src.Contact{
 		Name:  "Test",
 		Email: "test@example.com",
 		Phone: "1234567890",
 	}
 
-	// Tester la sauvegarde du contact
+	// Try to save the contact
 	err := redisService.SaveContactInRedis(&contact)
 	if err != nil {
 		t.Fatalf("SaveContactInRedis failed: %v", err)
 	}
 
-	// Vérifier que le contact est bien enregistré
+	// Verify that the contact was saved
 	savedData, err := client.Get(context.Background(), "contact:"+contact.ID).Result()
 	if err != nil {
 		t.Fatalf("Failed to get contact from Redis: %v", err)
@@ -52,7 +52,7 @@ func TestSaveContactInRedis(t *testing.T) {
 		t.Error("Saved contact does not match the original contact")
 	}
 
-	// Tester la sauvegarde d'un contact avec un email en double
+	// Try to save a duplicate contact
 	duplicateContact := src.Contact{
 		Name:  "Test Duplicate",
 		Email: "test@example.com", // même email que le premier contact
@@ -64,19 +64,19 @@ func TestSaveContactInRedis(t *testing.T) {
 		t.Error("Expected error for duplicate email, got nil")
 	}
 
-	// Vérifier que l'email en double n'a pas été enregistré
+	// Verify that the duplicate contact was not saved
 	_, err = client.Get(context.Background(), "contact:"+strconv.FormatInt(time.Now().UnixNano(), 10)).Result()
 	if err != redis.Nil {
 		t.Error("Duplicate contact should not have been saved")
 	}
 
-	// Supprimer le contact
+	// Delete contact
 	err = client.Del(context.Background(), "contact:"+contact.ID).Err()
 	if err != nil {
 		t.Fatalf("Failed to delete contact: %v", err)
 	}
 
-	// Vérifier que le contact a bien été supprimé
+	// Check that the contact was deleted
 	_, err = client.Get(context.Background(), "contact:"+contact.ID).Result()
 	if err != redis.Nil {
 		t.Error("Contact should have been deleted")

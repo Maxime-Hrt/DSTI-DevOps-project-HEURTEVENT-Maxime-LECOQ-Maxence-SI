@@ -7,7 +7,6 @@ on:
       - Maxime
       - Maxence
 
-
 jobs:
   test:
     name: Test

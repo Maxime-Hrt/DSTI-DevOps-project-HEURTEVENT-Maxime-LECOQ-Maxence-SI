@@ -3,8 +3,8 @@ services:
   app:
     container_name: go-app
     build:
-      context: ./user
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./user/Dockerfile
     ports:
       - 8080:8080
     depends_on:

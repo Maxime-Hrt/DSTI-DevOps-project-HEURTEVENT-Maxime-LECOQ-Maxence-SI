@@ -1,9 +1,9 @@
 FROM golang:1.21
 
 WORKDIR /user
-COPY go.mod go.sum ./
+COPY ./user/go.mod ./user/go.sum ./
 RUN go mod download
-COPY . .
+COPY ./user/ ./
 RUN CGO_ENABLED=0 GOOS=linux go build -v -o /usr/local/bin/devops-project .
 
 EXPOSE 8080

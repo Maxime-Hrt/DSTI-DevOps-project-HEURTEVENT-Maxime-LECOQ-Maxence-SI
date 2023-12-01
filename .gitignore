@@ -1,4 +1,5 @@
 .idea
+.env
 
 user/devops-project
 user/requests.http

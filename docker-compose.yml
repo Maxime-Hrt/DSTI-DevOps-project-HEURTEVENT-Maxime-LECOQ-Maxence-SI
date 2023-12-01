@@ -1,0 +1,22 @@
+name: devops-project
+services:
+  app:
+    container_name: go-app
+    build:
+      context: ./user
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=devopspassword
+
+  redis:
+    container_name: redis
+    command: redis-server --requirepass devopspassword
+    image: redis:alpine
+    ports:
+      - 6379:6379

@@ -29,5 +29,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+          file: ./user/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/devops-project-image:latest

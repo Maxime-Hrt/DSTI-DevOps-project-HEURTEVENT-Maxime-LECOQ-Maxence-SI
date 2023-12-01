@@ -135,7 +135,6 @@ func (r *RedisService) DeleteContactByEmail(email string) error {
 
 	var emailKey string
 	for _, contact := range contacts {
-		fmt.Println(contact.Email)
 		if contact.Email == email {
 			emailKey = "contact:" + contact.ID
 		}

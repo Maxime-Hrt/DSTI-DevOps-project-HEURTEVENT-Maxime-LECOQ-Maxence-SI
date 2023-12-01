@@ -15,7 +15,6 @@ import (
 )
 
 func main() {
-
 	_, err := src.Rdb.Ping(src.Ctx).Result()
 	if err != nil {
 		log.Fatal(err)
@@ -51,7 +50,7 @@ func main() {
 	}()
 
 	<-c
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
 	if err := app.Shutdown(); err != nil {

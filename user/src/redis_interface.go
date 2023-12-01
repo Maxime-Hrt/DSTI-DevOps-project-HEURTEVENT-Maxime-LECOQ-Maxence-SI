@@ -1,6 +1,9 @@
 package src
 
-import "github.com/redis/go-redis/v9"
+import (
+	"github.com/redis/go-redis/v9"
+	"os"
+)
 
 type RedisClient interface {
 	SaveContactInRedis(rdb *redis.Client, contact *Contact) error
@@ -11,8 +14,20 @@ type RedisClient interface {
 	UpdateContactInRedis(rdb *redis.Client, id string, updatedContact *Contact) error
 }
 
+func getEnvWithDefault(key, defaultValue string) string {
+	value := os.Getenv(key)
+	if value == "" {
+		return defaultValue
+	}
+	return value
+}
+
+var redisHost = getEnvWithDefault("REDIS_HOST", "localhost")
+var redisPort = getEnvWithDefault("REDIS_PORT", "6379")
+var redisPassword = getEnvWithDefault("REDIS_PASSWORD", "")
+
 var Rdb = redis.NewClient(&redis.Options{
-	Addr:     "localhost:6379",
-	Password: "",
+	Addr:     redisHost + ":" + redisPort,
+	Password: redisPassword,
 	DB:       0,
 })

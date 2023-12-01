@@ -4,7 +4,7 @@ WORKDIR /user
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN go build -v -o /usr/local/bin/devops-project .
+RUN CGO_ENABLED=0 GOOS=linux go build -v -o /usr/local/bin/devops-project .
 
 EXPOSE 8080
 CMD ["/usr/local/bin/devops-project"]

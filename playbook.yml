@@ -59,6 +59,16 @@
         state: started
         enabled: yes
 
+    - name: Execute Go tests
+      command: go test ./...
+      args:
+        chdir: /vagrant/user/test
+      register: test_result
+
+    - name: Print test results
+      debug:
+        msg: "{{ test_result.stdout }}"
+
   handlers:
     - name: start go app
       systemd:

@@ -1,5 +1,6 @@
 .idea
 .env
+.vagrant
 
 user/devops-project
 user/requests.http

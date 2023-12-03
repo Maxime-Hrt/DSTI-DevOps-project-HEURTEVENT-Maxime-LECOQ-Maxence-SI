@@ -11,6 +11,9 @@ Vagrant.configure("2") do |config|
   # Network configuration
   config.vm.network "private_network", type: "dhcp"
 
+  # Synchronisation de dossier
+  config.vm.synced_folder ".", "/vagrant"
+
   # Provider configuration (VirtualBox)
   config.vm.provider "virtualbox" do |vb|
     # Name displayed in VirtualBox

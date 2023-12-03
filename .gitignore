@@ -1,6 +1,7 @@
 .idea
 .env
 .vagrant
+./user/dump.rdb
 
 user/devops-project
 user/requests.http

@@ -60,7 +60,7 @@
         enabled: yes
 
     - name: Execute Go tests
-      command: go test ./...
+      command: go test -v ./...
       args:
         chdir: /vagrant/user/test
       register: test_result

@@ -34,7 +34,7 @@ jobs:
           context: .
           push: true
           tags: index.docker.io/${{ secrets.DOCKER_USERNAME }}/devops-project:${{ github.sha }}
-          file: ./Dockerfile
+          file: ./user/Dockerfile
 
   deploy:
     runs-on: ubuntu-latest

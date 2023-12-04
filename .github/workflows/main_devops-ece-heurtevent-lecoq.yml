@@ -50,5 +50,5 @@ jobs:
         with:
           app-name: 'devops-ece-heurtevent-lecoq'
           slot-name: 'production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_478cf047ddce41f2924e6d6141cb379e }}
-          images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_73236a0746a44b6ab8cc0c3978ed18bc }}/devops-project:${{ github.sha }}'
+          publish-profile: ${{ AZURE_PUBLISH_SETTINGS }}
+          images: 'index.docker.io/${{ secrets.DOCKER_USERNAME }}/devops-project:${{ github.sha }}'

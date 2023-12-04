@@ -31,6 +31,8 @@ func main() {
 		AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH",
 	}))
 
+	app.Get("/", src.Index)
+
 	app.Get("/swagger/*", fiberSwagger.HandlerDefault)
 	app.Get("/health", src.HealthCheck)
 

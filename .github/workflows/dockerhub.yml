@@ -1,9 +1,12 @@
 name: docker-hub-ci
 
 on:
+  push:
+    branches:
+      - main
   release:
     types: [published]
-          
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,4 +34,4 @@ jobs:
           context: .
           file: ./user/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/devops-project-image:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/devops-project-app:latest

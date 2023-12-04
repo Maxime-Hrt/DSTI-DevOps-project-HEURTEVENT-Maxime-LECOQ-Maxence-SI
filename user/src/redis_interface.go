@@ -31,3 +31,9 @@ var Rdb = redis.NewClient(&redis.Options{
 	Password: redisPassword,
 	DB:       0,
 })
+
+//var Rdb = redis.NewClient(&redis.Options{
+//	Addr:     "redis:6379",
+//	Password: "",
+//	DB:       0,
+//})

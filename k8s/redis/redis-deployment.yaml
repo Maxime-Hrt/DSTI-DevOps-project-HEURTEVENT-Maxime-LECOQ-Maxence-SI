@@ -4,7 +4,6 @@ metadata:
   annotations:
     kompose.cmd: kompose convert
     kompose.version: 1.31.2 (HEAD)
-  creationTimestamp: null
   labels:
     io.kompose.service: redis
   name: redis
@@ -13,28 +12,30 @@ spec:
   selector:
     matchLabels:
       io.kompose.service: redis
-  strategy: {}
   template:
     metadata:
       annotations:
         kompose.cmd: kompose convert
         kompose.version: 1.31.2 (HEAD)
-      creationTimestamp: null
       labels:
         io.kompose.network/devops-project-default: "true"
         io.kompose.service: redis
     spec:
       containers:
-        - args:
+        - name: redis
+          image: redis:alpine
+          args:
             - redis-server
             - --requirepass
             - devops_password_one_hundred
-          image: redis:alpine
-          name: redis
+            - --appendonly yes
+            - --appendfsync everysec
           ports:
             - containerPort: 6379
-              hostPort: 6379
-              protocol: TCP
-          resources: {}
-      restartPolicy: Always
-status: {}
+          volumeMounts:
+            - mountPath: /data
+              name: redis-storage
+      volumes:
+        - name: redis-storage
+          persistentVolumeClaim:
+            claimName: redis-pvc

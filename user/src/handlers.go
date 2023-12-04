@@ -6,6 +6,10 @@ import (
 
 var redisService = NewRedisService(Rdb)
 
+func HealthCheck(c *fiber.Ctx) error {
+	return c.SendString("OK")
+}
+
 // GetContacts godoc
 // @Summary Get list of contacts
 // @Description Retrieve a list of all contacts

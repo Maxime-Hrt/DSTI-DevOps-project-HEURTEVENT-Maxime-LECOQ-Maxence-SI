@@ -163,12 +163,12 @@ cd user
 ```
 ```shell
 # Build the Docker image
-docker build -t devops-project .
+docker build -t devops-project-app .
 ```
 You can now run the Docker image:
 ```shell
 # Run the Docker image
-docker run -p 8080:8080 devops-project
+docker run -p 8080:8080 devops-project-app
 ```
 ### Push the Docker image to Docker Hub
 To push the Docker image to Docker Hub, you will need to login to Docker Hub:
@@ -176,10 +176,15 @@ To push the Docker image to Docker Hub, you will need to login to Docker Hub:
 # Login to Docker Hub
 docker login
 ```
+Tag the Docker image:
+```shell
+# Tag the Docker image
+docker tag devops-project-app:latest maximehrt/devops-project-app:latest
+```
 Then, you can push the Docker image to Docker Hub:
 ```shell
 # Push the Docker image to Docker Hub
-docker push maximehrt/devops-project
+docker push maximehrt/devops-project-app:latest
 ```
 <p align="center">
     <img alt="docker_hub" src="Images/docker_img_hub/dockerhub.png" width="850"/>

@@ -9,14 +9,15 @@ services:
       - 8080:8080
     depends_on:
       - redis
-    environment:
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - REDIS_PASSWORD=devops_password_one_hundred
+#    environment:
+#      - REDIS_HOST=redis
+#      - REDIS_PORT=6379
+#      - REDIS_PASSWORD=devops_password_one_hundred
 
   redis:
     container_name: redis
-    command: redis-server --requirepass devops_password_one_hundred
+#    command: redis-server --requirepass devops_password_one_hundred
+    command: redis-server
     image: redis:alpine
     ports:
       - 6379:6379

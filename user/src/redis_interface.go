@@ -22,12 +22,19 @@ func getEnvWithDefault(key, defaultValue string) string {
 	return value
 }
 
-var redisHost = getEnvWithDefault("REDIS_HOST", "localhost")
-var redisPort = getEnvWithDefault("REDIS_PORT", "6379")
-var redisPassword = getEnvWithDefault("REDIS_PASSWORD", "")
+//
+//var redisHost = getEnvWithDefault("REDIS_HOST", "localhost")
+//var redisPort = getEnvWithDefault("REDIS_PORT", "6379")
+//var redisPassword = getEnvWithDefault("REDIS_PASSWORD", "")
+
+//var Rdb = redis.NewClient(&redis.Options{
+//	Addr:     redisHost + ":" + redisPort,
+//	Password: redisPassword,
+//	DB:       0,
+//})
 
 var Rdb = redis.NewClient(&redis.Options{
-	Addr:     redisHost + ":" + redisPort,
-	Password: redisPassword,
+	Addr:     "redis:6379",
+	Password: "",
 	DB:       0,
 })

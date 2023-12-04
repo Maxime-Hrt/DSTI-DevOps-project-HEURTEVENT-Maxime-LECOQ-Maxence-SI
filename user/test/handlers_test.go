@@ -64,3 +64,13 @@ func TestCreateContact(t *testing.T) {
 	utils.AssertEqual(t, nil, err)
 	utils.AssertEqual(t, 204, respDelete.StatusCode)
 }
+
+func TestHealthCheck(t *testing.T) {
+	app := fiber.New()
+	app.Get("/health", src.HealthCheck)
+
+	resp, err := app.Test(httptest.NewRequest("GET", "/health", nil))
+
+	utils.AssertEqual(t, nil, err)
+	utils.AssertEqual(t, 200, resp.StatusCode)
+}

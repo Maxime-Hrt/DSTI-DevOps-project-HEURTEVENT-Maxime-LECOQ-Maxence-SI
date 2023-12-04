@@ -35,19 +35,19 @@ jobs:
           tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_73236a0746a44b6ab8cc0c3978ed18bc }}/devops-project:${{ github.sha }}
           file: ./Dockerfile
 
-    deploy:
-      runs-on: ubuntu-latest
-      needs: build
-      environment:
-        name: 'production'
-        url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
-      steps:
-        - name: Deploy to Azure Web App
-          id: deploy-to-webapp
-          uses: azure/webapps-deploy@v2
-          with:
-            app-name: 'devops-ece-heurtevent-lecoq'
-            slot-name: 'production'
-            publish-profile: ${{ secrets.AzureAppService_PublishProfile_478cf047ddce41f2924e6d6141cb379e }}
-            images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_73236a0746a44b6ab8cc0c3978ed18bc }}/devops-project:${{ github.sha }}'
+    steps:
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'devops-ece-heurtevent-lecoq'
+          slot-name: 'production'
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_478cf047ddce41f2924e6d6141cb379e }}
+          images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_73236a0746a44b6ab8cc0c3978ed18bc }}/devops-project:${{ github.sha }}'

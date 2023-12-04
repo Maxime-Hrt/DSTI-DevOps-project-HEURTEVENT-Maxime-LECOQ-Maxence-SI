@@ -11,7 +11,7 @@ func HealthCheck(c *fiber.Ctx) error {
 }
 
 func Index(c *fiber.Ctx) error {
-	return c.SendString("Hello Azure 🙏🏻!")
+	return c.SendString("Hello World!")
 }
 
 // GetContacts godoc

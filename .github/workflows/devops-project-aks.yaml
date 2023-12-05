@@ -3,6 +3,7 @@ name: devops-project-aks
     push:
         branches:
             - main
+            - Maxime
     workflow_dispatch: {}
 env:
     ACR_RESOURCE_GROUP: devops-project
@@ -31,7 +32,7 @@ jobs:
                 subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
                 tenant-id: ${{ secrets.AZURE_TENANT_ID }}
             - name: Build and push image to ACR
-              run: az acr build --image ${{ env.CONTAINER_NAME }}:${{ github.sha }} --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.ACR_RESOURCE_GROUP }} -f ./user/Dockerfile ./user
+              run: az acr build --image ${{ env.CONTAINER_NAME }}:${{ github.sha }} --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.ACR_RESOURCE_GROUP }} -f ./user/Dockerfile .
     deploy:
         permissions:
             actions: read

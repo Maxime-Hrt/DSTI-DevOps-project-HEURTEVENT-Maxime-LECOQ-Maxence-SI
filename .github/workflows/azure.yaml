@@ -1,8 +1,7 @@
-name: devops-project-aks
+name: Deploy-Azure-AKS
 "on":
-    push:
-        branches:
-            - main
+    release:
+        types: [published]
     workflow_dispatch: {}
 env:
     ACR_RESOURCE_GROUP: devops-project

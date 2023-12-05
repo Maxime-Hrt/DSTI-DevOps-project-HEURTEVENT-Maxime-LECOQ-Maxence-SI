@@ -12,27 +12,28 @@
 - [8. Implement Monitoring to your containerized application](#8-implement-monitoring-to-your-containerized-application)
 - [9. Project Documentation](#9-project-documentation)
 
-| Subject                                                         | Code | Max. grade | Status |
-|:----------------------------------------------------------------|:----:|:----------:|-------|
-| Enriched web application with automated tests                   | APP  |     +1     | ✅     |
-| Continuous Integration and Continuous Delivery (and Deployment) | CICD |     +3     |       |
-| Containerisation with Docker                                    |  D   |     +1     | ✅     |
-| Orchestration with Docker Compose                               |  DC  |     +2     | ✅     |
-| Orchestration with Kubernetes                                   | KUB  |     +3     |  ✅     |
-| Service mesh using Istio                                        | IST  |     +2     |       |
-| Infrastructure as code using Ansible                            | IAC  |     +3     | ✅     |
-| Monitoring                                                      | MON  |     +2     |       |
-| Accurate project documentation in README.md file                | DOC  |     +3     | ✅     |
-| Each bonus task                                                 | BNS  |     +1     | ✅     |
-| Each penalty                                                    | PNL  |     -1     |       |
+| Subject                                                            | Code | Max. grade | Status |
+|:-------------------------------------------------------------------|:----:|:----------:|--------|
+| 🧪 Enriched web application with automated tests                   | APP  |     +1     | ✅      |
+| 🔄 Continuous Integration and Continuous Delivery (and Deployment) | CICD |     +3     | ✅      |
+| 🐳 Containerisation with Docker                                    |  D   |     +1     | ✅      |
+| 🚜 Orchestration with Docker Compose                               |  DC  |     +2     | ✅      |
+| ⚓️ Orchestration with Kubernetes                                   | KUB  |     +3     | ✅      |
+| 🕸️ Service mesh using Istio                                       | IST  |     +2     |        |
+| 💻 Infrastructure as code using Ansible                            | IAC  |     +3     | ✅      |
+| 📊 Monitoring                                                      | MON  |     +2     |        |
+| 📝 Accurate project documentation in README.md file                | DOC  |     +3     | ✅      |
+| + Each bonus task                                                  | BNS  |     +1     | ✅      |
+| - Each penalty                                                     | PNL  |     -1     |        |
 
-| Bonus               |
-|---------------------|
-| Golang CRUD App     |
-| Swagger             |
-| Static Front        |
-| Docker Hub pipeline |
-| Docker Hub Overview |
+| Bonus                                  |
+|----------------------------------------|
+| Golang CRUD App                        |
+| Swagger                                |
+| Static Front                           |
+| Docker Hub pipeline                    |
+| Docker Hub Overview                    |
+| Kubernetes Cluster Deployment on Azure |
 
 
 
@@ -107,16 +108,36 @@ go test -v
 To apply the CI/CD pipeline, you will need to install:
 - [Docker](https://docs.docker.com/get-docker/)
 ### Run the pipelines
-Two pipelines are available using GitHub Actions. 
-The first one described in `go.yml` is used to build the application and **run the tests** on each push.
-The second one described in `dockerhub.yml` is used to **build the Docker image and push** it to Docker Hub on each release.
+Three pipelines are available using GitHub Actions. 
 
+The first one described in `go_test.yml` is used to build the application and **run the tests** on each push.
 ### <p style="text-align: center;"> Go Test Actions</p>
 <p align="center">
     <img alt="Go Test Actions" src="Images/ci_cd/test_go.png" width="850"/>
 </p>
 
+The second one (related to the 4th part of the project) described in `docker_hub.yml` is used to build the Docker image and **push it to Docker Hub** on each push on the `main` branch or release.
+
+### <p style="text-align: center;"> Docker Hub Actions</p>
+<p align="center">
+    <img alt="Docker Hub Actions" src="Images/ci_cd/dockerhub.png" width="850"/>
+</p>
+
 ### Deploy the application on Azure
+
+The third one is a pipeline to deploy the application on Azure. It is described in `azure.yml` and is triggered on each release.
+Our Azure app is deployed as a **kubernetes cluster** with a **load balancer** and a **persistent volume claim** for Redis database (you will find more about it in the [6th part](#6-make-docker-orchestration-using-kubernetes)).
+
+### <p style="text-align: center;"> Azure Actions</p>
+<p align="center">
+    <img alt="Azure Actions" src="Images/ci_cd/azure.png" width="850"/>
+</p>
+
+### <p style="text-align: center;"> App hosted on Azure</p>
+<p align="center">
+    <img alt="Azure Actions" src="Images/ci_cd/azure_ip.png" width="850"/>
+</p>
+
 
 ## 3. Configure and provision a virtual environment (Vagrant)
 ### Prerequisites
@@ -186,6 +207,7 @@ Then, you can push the Docker image to Docker Hub:
 # Push the Docker image to Docker Hub
 docker push maximehrt/devops-project-app:latest
 ```
+
 <p align="center">
     <img alt="docker_hub" src="Images/docker_img_hub/dockerhub.png" width="850"/>
 </p>
@@ -276,6 +298,11 @@ When the pods are ready, you can access the application with the following comma
 # Access the application
 minikube service app
 ```
+By the way, on the Azure portal in the **Run Command** you can also see the good running of the application:
+
+<p align="center">
+    <img alt="kubernetes" src="Images/ci_cd/shell_azure.png" width="850"/>
+</p>
 
 ### Proof of work
 Click [here](Images/kubernetes_imgs/PVC.md) to see the proof of work

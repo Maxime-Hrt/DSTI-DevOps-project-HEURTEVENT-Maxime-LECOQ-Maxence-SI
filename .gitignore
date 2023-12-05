@@ -3,5 +3,7 @@
 .vagrant
 ./user/dump.rdb
 
+dump.rdb
+
 user/devops-project
 user/requests.http

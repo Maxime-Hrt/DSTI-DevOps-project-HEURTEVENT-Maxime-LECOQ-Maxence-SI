@@ -3,7 +3,6 @@ name: devops-project-aks
     push:
         branches:
             - main
-            - Maxime
     workflow_dispatch: {}
 env:
     ACR_RESOURCE_GROUP: devops-project

@@ -2,28 +2,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: devops-project
-  annotations:
-    kompose.cmd: kompose convert
-    kompose.version: 1.31.2 (HEAD)
-  creationTimestamp: null
+  name: app-v2
   labels:
-    io.kompose.service: app
-  name: app
+    app: my-app
+    version: v2
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: app
-  strategy: {}
+      app: my-app
+      version: v2
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert
-        kompose.version: 1.31.2 (HEAD)
-      creationTimestamp: null
       labels:
-        io.kompose.network/devops-project-default: "true"
-        io.kompose.service: app
+        app: my-app
+        version: v2
     spec:
       containers:
         - env:
@@ -38,8 +31,8 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
-              hostPort: 8080
+              hostPort: 8082
               protocol: TCP
-          resources: {}
+          resources: { }
       restartPolicy: Always
-status: {}
+status: { }

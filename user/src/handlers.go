@@ -10,6 +10,10 @@ func HealthCheck(c *fiber.Ctx) error {
 	return c.SendString("OK")
 }
 
+func Version(c *fiber.Ctx) error {
+	return c.SendString("latest")
+}
+
 // GetContacts godoc
 // @Summary Get list of contacts
 // @Description Retrieve a list of all contacts

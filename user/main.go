@@ -35,6 +35,7 @@ func main() {
 
 	app.Get("/swagger/*", fiberSwagger.HandlerDefault)
 	app.Get("/health", src.HealthCheck)
+	app.Get("/version", src.Version)
 
 	app.Get("/contacts", src.GetContacts)
 	app.Post("/contacts", src.CreateContact)

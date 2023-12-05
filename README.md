@@ -179,12 +179,8 @@ docker pull maximehrt/devops-project:latest
 ### Build the Docker image
 To build the Docker image, you can run the following command:
 ```shell
-# Move to the user directory
-cd user
-```
-```shell
 # Build the Docker image
-docker build -t devops-project-app .
+docker build -t devops-project-app -f ./user/Dockerfile .
 ```
 You can now run the Docker image:
 ```shell
@@ -200,7 +196,7 @@ docker login
 Tag the Docker image:
 ```shell
 # Tag the Docker image
-docker tag devops-project-app:latest maximehrt/devops-project-app:latest
+docker tag devops-project-app maximehrt/devops-project-app:latest
 ```
 Then, you can push the Docker image to Docker Hub:
 ```shell
@@ -216,7 +212,7 @@ docker push maximehrt/devops-project-app:latest
 From the root directory, run the following command:
 ```shell
 # Run the Docker Compose
-docker-compose up
+docker-compose up -d
 ```
 You can now access the application with the [Swagger UI](http://localhost:8080/swagger/index.html#/) or verify it's good running with the [health check](http://localhost:8080/health).
 

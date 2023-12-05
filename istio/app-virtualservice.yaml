@@ -5,15 +5,16 @@ metadata:
   namespace: devops-project
 spec:
   hosts:
-    - "*"
+    - app
   gateways:
     - app-gateway
   http:
-    - match:
-        - uri:
-            prefix: "/"
-      route:
+    - route:
         - destination:
             host: app
-            port:
-              number: 8080
+            subset: v1
+          weight: 80
+        - destination:
+            host: app
+            subset: v2
+          weight: 20

@@ -1,0 +1,10 @@
+http:
+  - route:
+      - destination:
+          host: app
+          subset: v1
+        weight: 80
+      - destination:
+          host: app
+          subset: v2
+        weight: 20

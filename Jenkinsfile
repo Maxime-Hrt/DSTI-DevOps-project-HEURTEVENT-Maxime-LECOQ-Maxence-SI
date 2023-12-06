@@ -5,13 +5,10 @@ pipeline {
             args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
-
     environment {
-        DOCKER_USERNAME = credentials('docker-username')
-        DOCKERHUB_TOKEN = credentials('dockerhub-token')
+        DOCKER_CREDENTIALS = credentials('maximehrt-dockerhub')
         IMAGE_NAME = "maximehrt/devops-project-app:latest"
     }
-
     stages {
         stage('Checkout') {
             steps {
@@ -30,7 +27,7 @@ pipeline {
             steps {
                 script {
                     // Les étapes suivantes utiliseront cette authentification
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-credentials') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'maximehrt-dockerhub') {
                     }
                 }
             }

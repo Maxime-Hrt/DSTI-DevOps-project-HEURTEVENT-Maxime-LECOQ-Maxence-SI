@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: devops-project
+#  namespace: devops-project
   annotations:
     kompose.cmd: kompose convert
     kompose.version: 1.31.2 (HEAD)

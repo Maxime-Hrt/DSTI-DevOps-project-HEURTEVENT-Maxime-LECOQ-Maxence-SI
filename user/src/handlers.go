@@ -11,7 +11,7 @@ func HealthCheck(c *fiber.Ctx) error {
 }
 
 func Version(c *fiber.Ctx) error {
-	return c.SendString("latest")
+	return c.SendString("v2.0.0")
 }
 
 // GetContacts godoc

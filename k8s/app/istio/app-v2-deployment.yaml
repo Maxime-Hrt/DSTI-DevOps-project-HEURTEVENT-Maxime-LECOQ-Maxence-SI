@@ -32,4 +32,3 @@ spec:
             - name: REDIS_PORT
               value: "6379"
       restartPolicy: Always
-

@@ -4,6 +4,7 @@ import (
 	"context"
 	_ "devops-project/docs"
 	"devops-project/src"
+	"github.com/ansrivas/fiberprometheus/v2"
 	fiberSwagger "github.com/arsmn/fiber-swagger/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -30,6 +31,10 @@ func main() {
 		AllowHeaders: "Origin, Content-Type, Accept",
 		AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH",
 	}))
+
+	prometheus := fiberprometheus.New("app")
+	prometheus.RegisterAt(app, "/metrics")
+	app.Use(prometheus.Middleware)
 
 	app.Static("/", "./src/public")
 

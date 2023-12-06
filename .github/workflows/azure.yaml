@@ -11,11 +11,11 @@ env:
     CLUSTER_RESOURCE_GROUP: devops-project
     CONTAINER_NAME: image-workflow-1701734546735
     DEPLOYMENT_MANIFEST_PATH: |
-        ./k8s/app/app-deployment.yaml
-        ./k8s/app/app-service.yaml
-        ./k8s/redis/redis-deployment.yaml
-        ./k8s/redis/redis-pvc.yaml
-        ./k8s/redis/redis-service.yaml
+        ./k8s/app/azure/app-deployment.yaml
+        ./k8s/app/azure/app-service.yaml
+        ./k8s/redis/azure/redis-deployment.yaml
+        ./k8s/redis/azure/redis-pvc.yaml
+        ./k8s/redis/azure/redis-service.yaml
 jobs:
     buildImage:
         permissions:

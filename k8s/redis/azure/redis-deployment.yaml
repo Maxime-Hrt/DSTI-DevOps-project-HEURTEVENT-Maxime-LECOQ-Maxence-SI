@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  #  namespace: devops-project
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.31.2 (HEAD)
+  labels:
+    io.kompose.service: redis
+  name: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: redis
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.31.2 (HEAD)
+      labels:
+        io.kompose.network/devops-project-default: "true"
+        io.kompose.service: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:alpine
+          args:
+            - redis-server
+            - --requirepass
+            - devops_password_one_hundred
+            - --appendonly yes
+            - --appendfsync everysec
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - mountPath: /data
+              name: redis-storage
+      volumes:
+        - name: redis-storage
+          persistentVolumeClaim:
+            claimName: redis-pvc

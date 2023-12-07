@@ -6,8 +6,7 @@ pipeline {
         }
     }
     environment {
-        DOCKER_CREDENTIALS = credentials('maximehrt-dockerhub')
-        IMAGE_NAME = "maximehrt/devops-project-app:latest"
+        DOCKERHUB_CREDENTIALS = credentials('maximehrt-dockerhub')
     }
     stages {
         stage('Checkout') {
@@ -23,19 +22,27 @@ pipeline {
                 '''
             }
         }
-        stage('Login to Docker Hub') {
+        stage('Build Docker Image') {
             steps {
                 script {
-                    // Les étapes suivantes utiliseront cette authentification
-                    docker.withRegistry('https://registry.hub.docker.com', 'maximehrt-dockerhub') {
-                    }
+                    def dockerImageName = 'maximehrt/devops-project-app'
+                    def dockerImageTag = 'latest'
+                    sh "docker build -t ${dockerImageName}:${dockerImageTag} -f ./user/Dockerfile ."
                 }
             }
         }
-        stage('Build and Push Docker Image') {
+        stage('Push to DockerHub') {
+            environment {
+                DOCKERHUB_CREDENTIALS = credentials('maximehrt-dockerhub')
+            }
             steps {
                 script {
-                    docker.build("${IMAGE_NAME}", "-f ./user/Dockerfile .").push()
+                    def dockerImageName = 'maximehrt/devops-project-app'
+                    def dockerImageTag = 'latest'
+                    sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+                    sh "docker tag devops-project-app ${dockerImageName}:${dockerImageTag}"
+                    sh "docker push ${dockerImageName}:${dockerImageTag}"
+                    sh "docker logout"
                 }
             }
         }

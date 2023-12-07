@@ -9,29 +9,27 @@ pipeline {
                 '''
             }
         }
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    def dockerImageName = 'devops-project-app'
-                    // Define platform specific image name
-                    sh "docker buildx build --platform linux/amd64,linux/arm64/v8 -t ${dockerImageName} -f ./user/Dockerfile . --load"
-                    // sh "docker build -t ${dockerImageName} -f ./user/Dockerfile ."
-                }
-            }
-        }
-        stage('Push to DockerHub') {
+        stage('Login to DockerHub') {
             environment {
                 DOCKERHUB_CREDENTIALS = credentials('maximehrt-dockerhub')
             }
             steps {
+                sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+            }
+        }
+        stage('Build and Push Docker Image') {
+            steps {
                 script {
                     def dockerImagePath = 'maximehrt/devops-project-app'
                     def dockerImageTag = 'latest'
-                    sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
-                    sh "docker tag devops-project-app ${dockerImagePath}:${dockerImageTag}"
-                    sh "docker push ${dockerImagePath}:${dockerImageTag}"
-                    sh "docker logout"
+                    // Utilisation de docker buildx pour construire et pousser l'image
+                    sh "docker buildx build --platform linux/amd64,linux/arm64/v8 -t ${dockerImagePath}:${dockerImageTag} -f ./user/Dockerfile . --push"
                 }
+            }
+        }
+        stage('Logout from DockerHub') {
+            steps {
+                sh "docker logout"
             }
         }
     }

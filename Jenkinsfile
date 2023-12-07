@@ -13,7 +13,9 @@ pipeline {
             steps {
                 script {
                     def dockerImageName = 'devops-project-app'
-                    sh "docker build -t ${dockerImageName} -f ./user/Dockerfile ."
+                    // Define platform specific image name
+                    sh "docker buildx build --platform linux/amd64,linux/arm64/v8 -t ${dockerImageName} -f ./user/Dockerfile . --load"
+                    // sh "docker build -t ${dockerImageName} -f ./user/Dockerfile ."
                 }
             }
         }

@@ -1,19 +1,6 @@
 pipeline {
-    agent {
-        docker {
-            image 'docker:19.03'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
-        }
-    }
-    environment {
-        DOCKERHUB_CREDENTIALS = credentials('maximehrt-dockerhub')
-    }
+    agent any
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
         stage('List files') {
             steps {
                 sh '''

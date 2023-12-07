@@ -9,35 +9,28 @@ pipeline {
                 '''
             }
         }
-        stage('Login to DockerHub') {
+        // Build Docker image for linux/arm64/v8
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    def dockerImageName = 'devops-project-app'
+                    sh "docker build -t ${dockerImageName} -f ./user/Dockerfile ."
+                }
+            }
+        }
+        stage('Push to DockerHub') {
             environment {
                 DOCKERHUB_CREDENTIALS = credentials('maximehrt-dockerhub')
             }
             steps {
-                sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
-            }
-        }
-        stage('Setup Docker Buildx') {
-            steps {
-                // Créer et utiliser un nouvel environnement Buildx
-                sh "docker buildx create --name mybuilder --use"
-                // Initialiser l'environnement Buildx
-                sh "docker buildx inspect mybuilder --bootstrap"
-            }
-        }
-        stage('Build and Push Docker Image') {
-            steps {
                 script {
                     def dockerImagePath = 'maximehrt/devops-project-app'
-                    def dockerImageTag = 'latest'
-                    // Construire et pousser l'image avec Buildx
-                    sh "docker buildx build --platform linux/amd64,linux/arm64/v8 -t ${dockerImagePath}:${dockerImageTag} -f ./user/Dockerfile . --push"
+                    def dockerImageTag = 'jenkins'
+                    sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+                    sh "docker tag devops-project-app ${dockerImagePath}:${dockerImageTag}"
+                    sh "docker push ${dockerImagePath}:${dockerImageTag}"
+                    sh "docker logout"
                 }
-            }
-        }
-        stage('Logout from DockerHub') {
-            steps {
-                sh "docker logout"
             }
         }
     }

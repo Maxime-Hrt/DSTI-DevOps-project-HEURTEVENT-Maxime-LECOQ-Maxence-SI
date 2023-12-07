@@ -12,9 +12,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    def dockerImageName = 'maximehrt/devops-project-app'
-                    def dockerImageTag = 'latest'
-                    sh "docker build -t ${dockerImageName}:${dockerImageTag} -f ./user/Dockerfile ."
+                    def dockerImageName = 'devops-project-app'
+                    sh "docker build -t ${dockerImageName} -f ./user/Dockerfile ."
                 }
             }
         }
@@ -24,11 +23,11 @@ pipeline {
             }
             steps {
                 script {
-                    def dockerImageName = 'maximehrt/devops-project-app'
+                    def dockerImagePath = 'maximehrt/devops-project-app'
                     def dockerImageTag = 'latest'
                     sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
-                    sh "docker tag devops-project-app ${dockerImageName}:${dockerImageTag}"
-                    sh "docker push ${dockerImageName}:${dockerImageTag}"
+                    sh "docker tag devops-project-app ${dockerImagePath}:${dockerImageTag}"
+                    sh "docker push ${dockerImagePath}:${dockerImageTag}"
                     sh "docker logout"
                 }
             }

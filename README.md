@@ -32,6 +32,7 @@
 | Swagger                                |
 | Static Front                           |
 | Docker Hub pipeline                    |
+| Docker Hub pipeline w/ Jenkins         |
 | Docker Hub Overview                    |
 | Kubernetes Cluster Deployment on Azure |
 
@@ -121,6 +122,12 @@ The second one (related to the 4th part of the project) described in `docker_hub
 ### <p style="text-align: center;"> Docker Hub Actions</p>
 <p align="center">
     <img alt="Docker Hub Actions" src="Images/ci_cd/dockerhub.png" width="850"/>
+</p>
+
+To push the Docker image to Docker Hub, we have also created a pipeline using Jenkins. It is described in `Jenkinsfile`, it is runnable from the Jenkins UI.
+<p align="center">
+    <img alt="Jenkins" src="Images/ci_cd/jenkins_push.png" width="850"/>
+    <img alt="Jenkins" src="Images/ci_cd/jenkins_stat.png" width="850"/>
 </p>
 
 ### Deploy the application on Azure

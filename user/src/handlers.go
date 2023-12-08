@@ -7,11 +7,11 @@ import (
 var redisService = NewRedisService(Rdb)
 
 func HealthCheck(c *fiber.Ctx) error {
-	return c.SendString("OK")
+	return c.SendString("app_health 1")
 }
 
 func Version(c *fiber.Ctx) error {
-	return c.SendString("latest")
+	return c.SendString("V2.0.0")
 }
 
 // GetContacts godoc

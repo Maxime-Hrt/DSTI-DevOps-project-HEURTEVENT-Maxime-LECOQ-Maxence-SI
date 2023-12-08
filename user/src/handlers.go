@@ -75,6 +75,16 @@ func GetContact(c *fiber.Ctx) error {
 	return c.JSON(contact)
 }
 
+// GetContactByEmail godoc
+// @Summary Get a contact by email
+// @Description Retrieve a contact by its email
+// @Tags contacts
+// @Accept json
+// @Produce json
+// @Param email path string true "Contact Email"
+// @Success 200 {object} Contact "Contact found"
+// @Failure 404 {string} string "Contact not found"
+// @Router /contacts/user_email/{email} [get]
 func GetContactByEmail(c *fiber.Ctx) error {
 	email := c.Params("email")
 

@@ -4,6 +4,7 @@
 ./user/dump.rdb
 
 dump.rdb
+kubectl
 
 user/devops-project
 user/requests.http

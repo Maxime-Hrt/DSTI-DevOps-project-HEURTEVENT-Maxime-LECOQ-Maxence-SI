@@ -307,6 +307,49 @@ Click [here](Images/kubernetes_imgs/PVC.md) to see the proof of work
 
 ## 8. Implement Monitoring to your containerized application
 
+### Prerequisites
+To Implement Monitoring to your containerized application, you will need to install:
+- [Kubernetes](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+- [Minikube](https://minikube.sigs.k8s.io/docs/start/)
+
+Go to the `/` directory of the project and run the following command:
+```shell
+# Start the configuration
+kubectl apply -f prometheus/
+```
+Then, run the following command to get the IP address of miniKube:
+```shell
+# Get the IP address of the Prometheus service
+kubectl get nodes -o wide
+```
+
+Then take the internal IP address of minikube and add the port 30000 to access to Prometheus dashboard example: `http://minikube_ip:30000/targets?search=`
+
+<p align="center">
+    <img alt="kubernetes" src="Images/monitoring/dashboard_prometheus.png" width="850"/>
+</p>
+
+To add grafana dashboard, run the following command:
+```shell
+# Start the configuration
+kubectl apply -f grafana/
+```
+Then, run the following command to get the IP address of miniKube:
+```shell
+# Get the IP address of the Grafana service
+kubectl get nodes -o wide
+```
+
+Then take the internal IP address of minikube and add the port 32000 to access to Grafana dashboard example: `http://minikube_ip:32000/`
+
+To add prometheus as a data source and see in the dashboard the metrics of the application follow this [tutorial](tutorial_grafana.md)
+
+Here is an example of the dashboard when the application is running and grafana is connected to prometheus with the endpoint `/health`:
+
+<p align="center">
+    <img alt="kubernetes" src="Images/monitoring/grafana_dashboard.png" width="850"/>
+</p>
+
 ## 9. Project Documentation
 
 

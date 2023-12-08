@@ -155,6 +155,44 @@ const docTemplate = `{
                 }
             }
         },
+        "/contacts/user_email/{email}": {
+            "get": {
+                "description": "Retrieve a contact by its email",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "contacts"
+                ],
+                "summary": "Get a contact by email",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Contact Email",
+                        "name": "email",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Contact found",
+                        "schema": {
+                            "$ref": "#/definitions/src.Contact"
+                        }
+                    },
+                    "404": {
+                        "description": "Contact not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/contacts/{id}": {
             "get": {
                 "description": "Retrieve a contact by its unique ID",

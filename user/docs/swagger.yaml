@@ -166,4 +166,29 @@ paths:
       summary: Delete a contact by ID
       tags:
       - contacts
+  /contacts/user_email/{email}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a contact by its email
+      parameters:
+      - description: Contact Email
+        in: path
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Contact found
+          schema:
+            $ref: '#/definitions/src.Contact'
+        "404":
+          description: Contact not found
+          schema:
+            type: string
+      summary: Get a contact by email
+      tags:
+      - contacts
 swagger: "2.0"

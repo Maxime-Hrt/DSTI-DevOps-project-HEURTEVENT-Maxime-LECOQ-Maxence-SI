@@ -75,6 +75,32 @@ func GetContact(c *fiber.Ctx) error {
 	return c.JSON(contact)
 }
 
+// GetContactByEmail godoc
+// @Summary Get a contact by email
+// @Description Retrieve a contact by its email
+// @Tags contacts
+// @Accept json
+// @Produce json
+// @Param email path string true "Contact Email"
+// @Success 200 {object} Contact "Contact found"
+// @Failure 404 {string} string "Contact not found"
+// @Router /contacts/user_email/{email} [get]
+func GetContactByEmail(c *fiber.Ctx) error {
+	email := c.Params("email")
+
+	contactId, err := redisService.GetContactIdFromEmail(email)
+	if err != nil {
+		return c.Status(404).SendString(err.Error())
+	}
+
+	contact, err := redisService.GetContactFromRedis(contactId)
+	if err != nil {
+		return c.Status(404).SendString(err.Error())
+	}
+
+	return c.Status(200).JSON(contact)
+}
+
 // UpdateContact godoc
 // @Summary Update a contact
 // @Description Update an existing contact by its unique ID

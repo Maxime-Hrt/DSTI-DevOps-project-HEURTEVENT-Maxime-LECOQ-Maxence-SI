@@ -19,9 +19,9 @@
 | 🐳 Containerisation with Docker                                    |  D   |     +1     | ✅      |
 | 🚜 Orchestration with Docker Compose                               |  DC  |     +2     | ✅      |
 | ⚓️ Orchestration with Kubernetes                                   | KUB  |     +3     | ✅      |
-| 🕸️ Service mesh using Istio                                       | IST  |     +2     |        |
+| 🕸️ Service mesh using Istio                                       | IST  |     +2     |  ✅       |
 | 💻 Infrastructure as code using Ansible                            | IAC  |     +3     | ✅      |
-| 📊 Monitoring                                                      | MON  |     +2     |        |
+| 📊 Monitoring                                                      | MON  |     +2     | ✅        |
 | 📝 Accurate project documentation in README.md file                | DOC  |     +3     | ✅      |
 | + Each bonus task                                                  | BNS  |     +1     | ✅      |
 | - Each penalty                                                     | PNL  |     -1     |        |
@@ -35,6 +35,8 @@
 | Docker Hub pipeline w/ Jenkins         |
 | Docker Hub Overview                    |
 | Kubernetes Cluster Deployment on Azure |
+| Kiali                                  |
+| Domain name                            |
 
 
 
@@ -312,6 +314,45 @@ Click [here](Images/kubernetes_imgs/PVC.md) to see the proof of work
 
 ## 7. Make a service mesh using Istio
 
+### Prerequisites
+To make a service mesh using Istio, you will need to install:
+- [Istio](https://istio.io/latest/docs/setup/getting-started/#download)
+- [Kubernetes](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+- [Minikube](https://minikube.sigs.k8s.io/docs/start/)
+
+Go to the `/` directory of the project and run the following command:
+```shell
+# Start the configuration
+kubectl apply -f ./istio/
+kubectl apply -f ./k8s/app/istio/
+kubectl apply -f ./k8s/redis/istio/
+```
+
+Then run the following command to see the pods:
+```shell
+# Get the pods
+kubectl get pod -n devops-project
+```
+
+if you want to see the redirections of the traffic in the shell you can run the following command:
+```shell
+for i in {1..20}; do curl $(minikube service app --url -n devops-project)/version; done
+```
+
+if you want to see the redirections of the traffic in the Kiali dashboard you can run the following command:
+```shell
+for i in {1..20}; do curl $(minikube service app --url -n devops-project); done
+istioctl dashboard kiali
+```
+
+Then you will be able to see the dashboard on the following url: `http://localhost:20001/kiali/console`
+
+<p align="center">
+    <img alt="kubernetes" src="Images/istio/dashboard_kiali.png" width="850"/>
+</p>
+
+above you can see the redirections of the traffic in the Kiali dashboard
+
 ## 8. Implement Monitoring to your containerized application
 
 ### Prerequisites
@@ -322,7 +363,7 @@ To Implement Monitoring to your containerized application, you will need to inst
 Go to the `/` directory of the project and run the following command:
 ```shell
 # Start the configuration
-kubectl apply -f prometheus/
+kubectl apply -f ./prometheus/
 ```
 Then, run the following command to get the IP address of miniKube:
 ```shell
@@ -339,7 +380,7 @@ Then take the internal IP address of minikube and add the port 30000 to access t
 To add grafana dashboard, run the following command:
 ```shell
 # Start the configuration
-kubectl apply -f grafana/
+kubectl apply -f ./grafana/
 ```
 Then, run the following command to get the IP address of miniKube:
 ```shell
@@ -358,5 +399,35 @@ Here is an example of the dashboard when the application is running and grafana 
 </p>
 
 ## 9. Project Documentation
+
+## 10. Bonus tasks
+
+First of all we buy a domain name on [hostinger](https://www.hostinger.fr/)
+
+<p align="center">
+    <img alt="kubernetes" src="Images/bonus/domain_name_buy.png" width="850"/>
+</p>
+
+Then we redirect the domain name to the IP address of the Azure VM:
+
+<p align="center">
+    <img alt="kubernetes" src="Images/bonus/domain_name_redirection.png" width="850"/>
+</p>
+
+Then you can check the application on the domain name: [ece-devops-project-maxence-maxime-aks.cloud](http://ece-devops-project-maxence-maxime-aks.cloud/swagger/index.html#/) if azure is running 
+
+<p align="center">
+    <img alt="kubernetes" src="Images/bonus/domain_name.png" width="850" alt="mettre image de notre web app avec le nom de domaine en haut"/>
+</p>
+
+If Azure is not running you can check the redirection of the domain name to the IP address of the Azure VM on [dnschecker](https://dnschecker.org/#A/devops-project.fr)
+
+<p align="center">
+    <img alt="kubernetes" src="Images/bonus/domain_name_checker1.png" width="850"/>
+</p>
+
+<p align="center">
+    <img alt="kubernetes" src="Images/bonus/domain_name_checker2.png" width="850"/>
+</p>
 
 

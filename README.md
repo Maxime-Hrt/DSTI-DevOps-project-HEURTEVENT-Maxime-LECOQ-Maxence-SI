@@ -390,7 +390,7 @@ kubectl get nodes -o wide
 
 Then take the internal IP address of minikube and add the port 32000 to access to Grafana dashboard example: `http://minikube_ip:32000/`
 
-To add prometheus as a data source and see in the dashboard the metrics of the application follow this [tutorial](tutorial_grafana.md)
+To add prometheus as a data source and see in the dashboard the metrics of the application follow this [tutorial](https://github.com/Maxime-Hrt/DSTI-DevOps-project-HEURTEVENT-Maxime-LECOQ-Maxence-SI/blob/main/Images/monitoring/grafana_tutorial.md)
 
 Here is an example of the dashboard when the application is running and grafana is connected to prometheus with the endpoint `/health`:
 

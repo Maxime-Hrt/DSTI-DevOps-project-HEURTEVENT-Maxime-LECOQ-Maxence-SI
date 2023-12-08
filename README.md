@@ -310,7 +310,7 @@ By the way, on the Azure portal in the **Run Command** you can also see the good
 </p>
 
 ### Proof of work
-Click [here](Images/kubernetes_imgs/PVC.md) to see the proof of work
+Click [here](https://github.com/Maxime-Hrt/DSTI-DevOps-project-HEURTEVENT-Maxime-LECOQ-Maxence-SI/blob/main/Images/kubernetes_imgs/PVC.md) to see the proof of work
 
 ## 7. Make a service mesh using Istio
 

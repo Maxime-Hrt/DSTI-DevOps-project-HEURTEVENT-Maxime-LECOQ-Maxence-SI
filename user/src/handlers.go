@@ -75,6 +75,22 @@ func GetContact(c *fiber.Ctx) error {
 	return c.JSON(contact)
 }
 
+func GetContactByEmail(c *fiber.Ctx) error {
+	email := c.Params("email")
+
+	contactId, err := redisService.GetContactIdFromEmail(email)
+	if err != nil {
+		return c.Status(404).SendString(err.Error())
+	}
+
+	contact, err := redisService.GetContactFromRedis(contactId)
+	if err != nil {
+		return c.Status(404).SendString(err.Error())
+	}
+
+	return c.Status(200).JSON(contact)
+}
+
 // UpdateContact godoc
 // @Summary Update a contact
 // @Description Update an existing contact by its unique ID

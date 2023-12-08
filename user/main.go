@@ -45,6 +45,7 @@ func main() {
 	app.Get("/contacts", src.GetContacts)
 	app.Post("/contacts", src.CreateContact)
 	app.Get("/contacts/:id", src.GetContact)
+	app.Get("/contacts/user_email/:email", src.GetContactByEmail)
 	app.Put("/contacts/:id", src.UpdateContact)
 	app.Delete("/contacts/id/:id", src.DeleteContact)
 	app.Delete("/contacts/email/:email", src.DeleteContactByEmail)

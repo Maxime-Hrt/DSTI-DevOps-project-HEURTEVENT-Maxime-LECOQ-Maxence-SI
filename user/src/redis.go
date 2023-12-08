@@ -68,6 +68,42 @@ func (r *RedisService) GetContactFromRedis(id string) (*Contact, error) {
 	return &contact, nil
 }
 
+func (r *RedisService) GetContactIdFromEmail(email string) (string, error) {
+	var contacts []Contact
+	keys, err := r.Client.Keys(Ctx, "contact:*").Result()
+	if err != nil {
+		return "", err
+	}
+
+	for _, key := range keys {
+		val, err := r.Client.Get(Ctx, key).Result()
+		if err != nil {
+			return "", err
+		}
+
+		var contact Contact
+		err = json.Unmarshal([]byte(val), &contact)
+		if err != nil {
+			return "", err
+		}
+
+		contacts = append(contacts, contact)
+	}
+
+	var contactId string
+	for _, contact := range contacts {
+		if contact.Email == email {
+			contactId = contact.ID
+		}
+	}
+
+	if contactId == "" {
+		return "", fmt.Errorf("contact not found")
+	}
+
+	return contactId, nil
+}
+
 func (r *RedisService) GetAllContactsFromRedis() ([]Contact, error) {
 	keys, err := r.Client.Keys(Ctx, "contact:*").Result()
 	if err != nil {

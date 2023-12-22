@@ -182,7 +182,7 @@ Our Docker image is available on [Docker Hub](https://hub.docker.com/r/maximehrt
 you can pull it using the following command:
 ```shell
 # Pull the Docker image
-docker pull maximehrt/devops-project:latest
+docker pull maximehrt/devops-project-app:latest
 ```
 
 ### Build the Docker image

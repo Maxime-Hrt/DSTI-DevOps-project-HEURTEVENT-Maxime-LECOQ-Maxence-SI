@@ -26,19 +26,19 @@
 | + Each bonus task                                                  | BNS  |     +1     | ✅      |
 | - Each penalty                                                     | PNL  |     -1     |        |
 
-| Bonus                                  |
-|----------------------------------------|
-| Golang CRUD App                        |
-| Swagger                                |
-| Static Front                           |
-| Docker Hub pipeline                    |
-| Docker Hub pipeline w/ Jenkins         |
-| Docker Hub Overview                    |
-| Kubernetes Cluster Deployment on Azure |
-| Kiali                                  |
-| Domain name                            |
+| Bonus                                                  |
+|--------------------------------------------------------|
+| Golang CRUD App                                        |
+| Swagger                                                |
+| Static Front                                           |
+| Docker Hub pipeline (build multiplatform docker image) |
+| Docker Hub pipeline w/ Jenkins                         |
+| Docker Hub Overview                                    |
+| Kubernetes Cluster Deployment on Azure                 |
+| Kiali                                                  |
+| Domain name                                            |
 
-
+Bonus tasks will be included in all the parts of the project described below. 
 
 ## Installation
 Start by cloning the repository:
@@ -49,6 +49,14 @@ Then, move to the project directory:
 ```shell
 cd DSTI-DevOps-project-HEURTEVENT-Maxime-LECOQ-Maxence-SI
 ```
+Create a `.env` file in the root directory and add the following variables:
+```shell
+# .env file
+REDIS_HOST=redis
+REDIS_PORT=6379
+REDIS_PASSWORD=SET_YOUR_PASSWORD
+```
+The environment variables are used in the `docker-compose.yml` file to connect to Redis.
 
 ## 1. Create a web application
 ### Prerequisites
@@ -180,6 +188,13 @@ To build the Docker image, you will need to install:
 
 Our Docker image is available on [Docker Hub](https://hub.docker.com/r/maximehrt/devops-project-image/tags)
 you can pull it using the following command:
+
+It may be necessary to login to Docker Hub:
+```shell
+# Login to Docker Hub
+docker login
+```
+Then, you can pull the Docker image:
 ```shell
 # Pull the Docker image
 docker pull maximehrt/devops-project-app:latest
@@ -190,11 +205,6 @@ To build the Docker image, you can run the following command:
 ```shell
 # Build the Docker image
 docker build -t devops-project-app -f ./user/Dockerfile .
-```
-You can now run the Docker image:
-```shell
-# Run the Docker image
-docker run -p 8080:8080 devops-project-app
 ```
 ### Push the Docker image to Docker Hub
 To push the Docker image to Docker Hub, you will need to login to Docker Hub:
@@ -218,6 +228,10 @@ docker push maximehrt/devops-project-app:latest
 </p>
 
 ## 5. Make container orchestration using Docker Compose
+### Prerequisites
+To make container orchestration using Docker Compose, you will need to install:
+- [Docker Compose](https://docs.docker.com/compose/install/)
+
 From the root directory, run the following command:
 ```shell
 # Run the Docker Compose
@@ -226,7 +240,7 @@ docker-compose up -d
 You can now access the application with the [Swagger UI](http://localhost:8080/swagger/index.html#/) or verify it's good running with the [health check](http://localhost:8080/health).
 
 <p align="center">
-    <img alt="docker desktop running" src="Images/docker_comp/desktop.png" width="850"/>
+    <img alt="docker desktop running" src="./Images/docker_comp/desktop.png" width="850"/>
 </p>
 
 ## 6. Make docker orchestration using Kubernetes
@@ -235,63 +249,21 @@ You can now access the application with the [Swagger UI](http://localhost:8080/s
 To make docker orchestration using Kubernetes, you will need to install:
 - [Kubernetes](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 - [Minikube](https://minikube.sigs.k8s.io/docs/start/)
-- [Kompose](https://kompose.io/installation/)
 
 Start the cluster:
 ```shell
 # Start the cluster
 minikube start
 ```
-### Create Kubernetes manifests files (Kompose)
-From the root directory with explicit variables in the `docker-compose.yml`, run the following command:
-```shell
-# Create Kubernetes manifests files
-kompose convert -f docker-compose.yml
-```
-Move the files into the appropriate directory:
+Click [here](https://github.com/Maxime-Hrt/DSTI-DevOps-project-HEURTEVENT-Maxime-LECOQ-Maxence-SI/blob/main/Images/kubernetes_imgs/kompose.md) to see how we create the Kubernetes manifests files using **Kompose**
 
-<p>
-    <img alt="kubernetes" src="Images/kubernetes_imgs/k8s_structure.png" width="450"/>
-</p>
-
-Don't forget to add the docker image path in the `app-deployment.yaml` file:
-```yaml
-...
-spec:
-  containers:
-  - image: maximehrt/devops-project-app:latest
-...
-```
-To synchronize the app service with **Azure** add in the `app-service.yaml` file:
-```yaml
-...
-spec:
-  type: LoadBalancer
-...
-```
-
-### Persistent Volume Claim
-Create a persistent volume claim for Redis database to store data in a persistent volume which means that the data will be stored even if the pod is deleted.
-
-Add a `redis-pvc.yaml` file in the `k8s/redis` directory:
-```yaml
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: redis-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-```
-
+_The current k8s structure is slightly different from the one described above because in the app and redis directories, we have added a directory named **istio** to add the Istio sidecar container to the pods._
 ### Run the application
 From the root directory, run the following command to create deployments, services and persistent volume claim:
 ```shell
 # Run the application
-kubectl apply -f k8s/
+kubectl apply -f k8s/app/azure/
+kubectl apply -f k8s/redis/azure/
 ```
 Wait for the pods to be ready (the time to pull the Docker image):
 ```shell
@@ -306,7 +278,7 @@ minikube service app
 By the way, on the Azure portal in the **Run Command** you can also see the good running of the application:
 
 <p align="center">
-    <img alt="kubernetes" src="Images/ci_cd/shell_azure.png" width="850"/>
+    <img alt="kubernetes" src="./Images/ci_cd/shell_azure.png" width="850"/>
 </p>
 
 ### Proof of work
@@ -319,7 +291,14 @@ To make a service mesh using Istio, you will need to install:
 - [Istio](https://istio.io/latest/docs/setup/getting-started/#download)
 - [Kubernetes](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 - [Minikube](https://minikube.sigs.k8s.io/docs/start/)
+- [(Bonus) Kiali](https://istio.io/latest/docs/tasks/observability/kiali/)
 
+Create a namespace for the project:
+```shell
+# Create a namespace for the project
+kubectl create namespace devops-project
+kubectl label namespace devops-project istio-injection=enabled
+```
 Go to the `/` directory of the project and run the following command:
 ```shell
 # Start the configuration
@@ -342,6 +321,8 @@ for i in {1..20}; do curl $(minikube service app --url -n devops-project)/versio
 if you want to see the redirections of the traffic in the Kiali dashboard you can run the following command:
 ```shell
 for i in {1..20}; do curl $(minikube service app --url -n devops-project); done
+```
+```shell
 istioctl dashboard kiali
 ```
 
@@ -371,7 +352,9 @@ Then, run the following command to get the IP address of miniKube:
 kubectl get nodes -o wide
 ```
 
-Then take the internal IP address of minikube and add the port 30000 to access to Prometheus dashboard example: `http://minikube_ip:30000/targets?search=`
+Then take the internal IP address of minikube and add the port 30000 to access to Prometheus dashboard example:
+`http://<MINIKUBE_IP>:30000/targets?search=`
+
 
 <p align="center">
     <img alt="kubernetes" src="Images/monitoring/dashboard_prometheus.png" width="850"/>
@@ -388,7 +371,7 @@ Then, run the following command to get the IP address of miniKube:
 kubectl get nodes -o wide
 ```
 
-Then take the internal IP address of minikube and add the port 32000 to access to Grafana dashboard example: `http://minikube_ip:32000/`
+Then take the internal IP address of minikube and add the port 32000 to access to Grafana dashboard example: `http://<MINIKUBE_IP>:32000/`
 
 To add prometheus as a data source and see in the dashboard the metrics of the application follow this [tutorial](https://github.com/Maxime-Hrt/DSTI-DevOps-project-HEURTEVENT-Maxime-LECOQ-Maxence-SI/blob/main/Images/monitoring/grafana_tutorial.md)
 
@@ -398,9 +381,7 @@ Here is an example of the dashboard when the application is running and grafana 
     <img alt="kubernetes" src="Images/monitoring/grafana_dashboard.png" width="850"/>
 </p>
 
-## 9. Project Documentation
-
-## 10. Bonus tasks
+## 10. Domain name
 
 First of all we buy a domain name on [hostinger](https://www.hostinger.fr/)
 
@@ -414,11 +395,7 @@ Then we redirect the domain name to the IP address of the Azure VM:
     <img alt="kubernetes" src="Images/bonus/domain_name_redirection.png" width="850"/>
 </p>
 
-Then you can check the application on the domain name: [ece-devops-project-maxence-maxime-aks.cloud](http://ece-devops-project-maxence-maxime-aks.cloud/swagger/index.html#/) if azure is running 
-
-<p align="center">
-    <img alt="kubernetes" src="Images/bonus/domain_name.png" width="850" alt="mettre image de notre web app avec le nom de domaine en haut"/>
-</p>
+Then you can check the application on the domain name: [ece-devops-project-maxence-maxime-aks.cloud](http://ece-devops-project-maxence-maxime-aks.cloud/swagger/index.html#/) if azure is running
 
 If Azure is not running you can check the redirection of the domain name to the IP address of the Azure VM on [dnschecker](https://dnschecker.org/#A/devops-project.fr)
 

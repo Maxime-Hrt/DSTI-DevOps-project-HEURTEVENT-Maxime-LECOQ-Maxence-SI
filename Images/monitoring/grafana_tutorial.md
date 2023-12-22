@@ -1,7 +1,7 @@
 # Grafana Tutorial
 
 ## Login to Grafana
-First of all connect to the grafana address: `http://minikube_ip:32000/`
+First of all connect to the grafana address: `http://<MINIKUBE_IP>:32000/`
 
 ![img.png](tutografana1.png)
 

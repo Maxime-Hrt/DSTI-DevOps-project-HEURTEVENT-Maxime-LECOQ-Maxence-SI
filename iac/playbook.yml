@@ -1,0 +1,78 @@
+---
+- name: VM Provisioning for the DevOps Project
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Update VM package cache
+      apt:
+        update_cache: yes
+
+    - name: Install software-properties-common
+      apt:
+        name: software-properties-common
+        state: present
+
+    - name: Add PPA for Go
+      apt_repository:
+        repo: ppa:longsleep/golang-backports
+        state: present
+
+    - name: Install Go
+      apt:
+        name: golang-go
+        state: present
+        update_cache: yes
+
+    - name: Install Redis
+      apt:
+        name: redis-server
+        state: present
+
+    - name: Compile Go application
+      command:
+        chdir: /vagrant/user
+        cmd: go build -o devops-project
+
+    - name: Create systemd service file for Go application
+      copy:
+        dest: "/etc/systemd/system/devops-project.service"
+        content: |
+          [Unit]
+          Description=DevOps Project Go Application
+
+          [Service]
+          ExecStart=/vagrant/user/devops-project
+          WorkingDirectory=/vagrant/user
+          User=vagrant
+          Group=vagrant
+          Restart=always
+
+          [Install]
+          WantedBy=multi-user.target
+      notify:
+        - start go app
+
+    - name: Start Redis service
+      service:
+        name: redis-server
+        state: started
+        enabled: yes
+
+    - name: Execute Go tests
+      command: go test -v ./...
+      args:
+        chdir: /vagrant/user/test
+      register: test_result
+
+    - name: Print test results
+      debug:
+        msg: "{{ test_result.stdout }}"
+
+  handlers:
+    - name: start go app
+      systemd:
+        name: devops-project
+        state: started
+        enabled: yes
+        daemon_reload: yes

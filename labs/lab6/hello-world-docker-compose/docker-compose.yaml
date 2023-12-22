@@ -1,0 +1,26 @@
+version: '3'
+services:
+  redis:
+    image: redis
+    ports:
+     - "6379:6379"
+    volumes:
+      - redis-data:/data  # Docker Volume pour stocker les données Redis
+  web:
+    depends_on:
+      - redis
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: image5
+    ports:
+      - "5000:8080"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - data-volume:/usr/src/app/data
+
+volumes:
+  redis-data:
+  data-volume:

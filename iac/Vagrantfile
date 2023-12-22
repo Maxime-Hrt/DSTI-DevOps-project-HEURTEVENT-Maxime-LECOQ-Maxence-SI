@@ -1,0 +1,34 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  # VM name
+  config.vm.define "devops-project"
+
+  # Box choice and its version
+  config.vm.box = "ubuntu/jammy64"
+
+  # Network configuration
+  config.vm.network "private_network", type: "dhcp"
+
+  # Synchronisation de dossier
+  config.vm.synced_folder "../.", "/vagrant", exclude: ["./labs/"]
+
+  # Provider configuration (VirtualBox)
+  config.vm.provider "virtualbox" do |vb|
+    # Name displayed in VirtualBox
+    vb.name = "devops-project"
+
+    # Resources allocated to the VM
+    vb.memory = "1024"   # RAM in MB
+    vb.cpus = 2          # Number of CPU cores
+  end
+
+  # Port forwarding configuration
+  config.vm.network "forwarded_port", guest: 8080, host: 3000
+
+  # Ansible provisioning configuration
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "playbook.yml"
+  end
+end

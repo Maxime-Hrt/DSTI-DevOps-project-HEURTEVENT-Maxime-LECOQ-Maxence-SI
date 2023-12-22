@@ -1,6 +1,6 @@
 .idea
 .env
-.vagrant
+iac/.vagrant
 ./user/dump.rdb
 
 dump.rdb

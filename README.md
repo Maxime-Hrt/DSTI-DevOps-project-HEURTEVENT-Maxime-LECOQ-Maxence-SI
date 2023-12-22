@@ -165,6 +165,11 @@ To configure and provision a virtual environment, you will need to install:
 
 Install vagrant Accoding to the documentation for the **VirtualBox** provider.
 ### Configure with Vagrant
+First, you need to move to the `/iac` directory of the project:
+```shell
+# Move to the iac directory
+cd iac
+```
 To build the virtual environment with Vagrant and Ansible, you can run the following command from the root directory:
 ```shell
 # Run the Vagrant configuration

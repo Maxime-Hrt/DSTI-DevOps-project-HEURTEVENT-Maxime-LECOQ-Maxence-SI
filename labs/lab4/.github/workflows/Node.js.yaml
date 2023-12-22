@@ -1,0 +1,36 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "dev-Maxime", "dev-Maxence" ]
+  pull_request:
+    branches: [ "dev-Maxime", "dev-Maxence" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    services:
+      # Label used to access the service container
+      redis:
+        # Docker Hub image
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 6379 on service container to the host
+          - 6379:6379
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm test

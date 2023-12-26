@@ -10,7 +10,6 @@
 - [6. Make docker orchestration using Kubernetes](#6-make-docker-orchestration-using-kubernetes)
 - [7. Make a service mesh using Istio](#7-make-a-service-mesh-using-istio)
 - [8. Implement Monitoring to your containerized application](#8-implement-monitoring-to-your-containerized-application)
-- [9. Project Documentation](#9-project-documentation)
 
 | Subject                                                            | Code | Max. grade | Status |
 |:-------------------------------------------------------------------|:----:|:----------:|--------|
@@ -18,10 +17,10 @@
 | 🔄 Continuous Integration and Continuous Delivery (and Deployment) | CICD |     +3     | ✅      |
 | 🐳 Containerisation with Docker                                    |  D   |     +1     | ✅      |
 | 🚜 Orchestration with Docker Compose                               |  DC  |     +2     | ✅      |
-| ⚓️ Orchestration with Kubernetes                                   | KUB  |     +3     | ✅      |
-| 🕸️ Service mesh using Istio                                       | IST  |     +2     |  ✅       |
+| ⚓️ Orchestration with Kubernetes                                    | KUB  |     +3     | ✅      |
+| 🕸️ Service mesh using Istio                                        | IST  |     +2     | ✅      |
 | 💻 Infrastructure as code using Ansible                            | IAC  |     +3     | ✅      |
-| 📊 Monitoring                                                      | MON  |     +2     | ✅        |
+| 📊 Monitoring                                                      | MON  |     +2     | ✅      |
 | 📝 Accurate project documentation in README.md file                | DOC  |     +3     | ✅      |
 | + Each bonus task                                                  | BNS  |     +1     | ✅      |
 | - Each penalty                                                     | PNL  |     -1     |        |
@@ -37,6 +36,7 @@
 | Kubernetes Cluster Deployment on Azure                 |
 | Kiali                                                  |
 | Domain name                                            |
+| Http file                                              |
 
 Bonus tasks will be included in all the parts of the project described below. 
 

@@ -2,33 +2,33 @@
 GET http://localhost:8080/contacts
 
 ### Get Contact by ID
-GET http://localhost:8080/contacts/1701399449839168000
+GET http://localhost:8080/contacts/{id}
 
 ### Get Contact by Email
-GET http://localhost:8080/contacts/user_email/test@example.com
+GET http://localhost:8080/contacts/user_email/{email}
 
 ### Create Contact
 POST http://localhost:8080/contacts
 content-type: application/json
 
 {
-  "name": "Pierre",
-  "email": "test@jordan.co",
-  "phone": "1234567890"
+  "name": "{NAME}",
+  "email": "{EMAIL}",
+  "phone": "{PHONE_NUMBER}"
 }
 
 ### Update Contact
-PUT http://localhost:8080/contacts/1701201027529122000
+PUT http://localhost:8080/contacts/{id}
 content-type: application/json
 
 {
-  "name": "Rayane Bouaita",
-  "email": "john@doe.com",
-  "phone": "9876543210"
+  "name": "{NAME}",
+  "email": "{EMAIL}",
+  "phone": "{PHONE_NUMBER}"
 }
 
 ### Delete Contact
-DELETE http://localhost:8080/contacts/id/1701201027529122000
+DELETE http://localhost:8080/contacts/id/{id}
 
 ### Delete Contact Mail
-DELETE http://localhost:8080/contacts/email/test@example.com
+DELETE http://localhost:8080/contacts/email/{email}

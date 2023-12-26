@@ -85,6 +85,7 @@ go get .
 go build && ./devops-project
 ```
 You can now access the application with the [Swagger UI](http://localhost:8080/swagger/index.html#/), the **static frontview** or simply verify it's good running with the [health check](http://localhost:8080/health).
+You can also test endpoints using the `request.http` file.
 
 ### <p style="text-align: center;">Swagger UI</p>
 

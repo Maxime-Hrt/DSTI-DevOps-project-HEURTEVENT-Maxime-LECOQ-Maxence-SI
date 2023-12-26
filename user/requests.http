@@ -1,0 +1,34 @@
+### Get all Contacts
+GET http://localhost:8080/contacts
+
+### Get Contact by ID
+GET http://localhost:8080/contacts/1701399449839168000
+
+### Get Contact by Email
+GET http://localhost:8080/contacts/user_email/test@example.com
+
+### Create Contact
+POST http://localhost:8080/contacts
+content-type: application/json
+
+{
+  "name": "Pierre",
+  "email": "test@jordan.co",
+  "phone": "1234567890"
+}
+
+### Update Contact
+PUT http://localhost:8080/contacts/1701201027529122000
+content-type: application/json
+
+{
+  "name": "Rayane Bouaita",
+  "email": "john@doe.com",
+  "phone": "9876543210"
+}
+
+### Delete Contact
+DELETE http://localhost:8080/contacts/id/1701201027529122000
+
+### Delete Contact Mail
+DELETE http://localhost:8080/contacts/email/test@example.com
